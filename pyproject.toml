@@ -1,6 +1,6 @@
 [project]
-name = "secret-manager"
-description = "Secret Manager"
+name = "secret-management-system"
+description = "Secret Management System"
 requires-python = ">=3.11"
 version = "0.1.0"
 

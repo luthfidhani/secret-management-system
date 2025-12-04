@@ -1,6 +1,6 @@
 """
-Secret Manager - Flask Web Application
-A secure, self-hosted password and identity manager
+Secret Management System - Flask Web Application
+A secure, self-hosted password and identity management system
 """
 
 import os

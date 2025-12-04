@@ -1,5 +1,5 @@
 """
-Encryption utilities for Secret Manager
+Encryption utilities for Secret Management System
 Uses AES-256-GCM for encryption and Argon2id for key derivation
 """
 

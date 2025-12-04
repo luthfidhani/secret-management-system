@@ -321,7 +321,7 @@ wheels = [
 ]
 
 [[package]]
-name = "secret-manager"
+name = "secret-management-system"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [

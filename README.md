@@ -1,6 +1,6 @@
-# 🔐 Secret Manager
+# 🔐 Secret Management System
 
-A secure, self-hosted password and identity manager with local encryption. Your secrets never leave your device unencrypted.
+A secure, self-hosted password and identity management-system with local encryption. Your secrets never leave your device unencrypted.
 
 ![Python](https://img.shields.io/badge/Python-3.11+-blue?logo=python)
 ![Flask](https://img.shields.io/badge/Flask-3.0-green?logo=flask)
@@ -62,14 +62,14 @@ A secure, self-hosted password and identity manager with local encryption. Your 
 ### Prerequisites
 
 - Python 3.11 or higher
-- pip (Python package manager)
+- pip (Python package management-system)
 
 ### Installation
 
 1. **Clone or download this repository**
 
 ```bash
-cd secret-manager
+cd secret-management-system
 ```
 
 2. **Create virtual environment (recommended)**
@@ -115,7 +115,7 @@ Open `http://localhost:5000`
 ## 📁 Project Structure
 
 ```
-secret-manager/
+secret-management-system/
 ├── app.py                          # Flask application (routes, API)
 ├── crypto_utils.py                 # Encryption/decryption utilities
 ├── requirements.txt                # Python dependencies

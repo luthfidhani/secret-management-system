@@ -1,7 +1,7 @@
 # Docker-compose.yml version support, not internal version of this composition.
 services:
   web:
-    container_name: secret-manager
+    container_name: secret-management-system
     build: .
     env_file:
       - .env
