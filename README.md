@@ -256,6 +256,10 @@ Contributions are welcome! Please feel free to submit issues and pull requests.
 
 MIT License - feel free to use this for personal or commercial purposes.
 
+## 📸 Screnshots
+<img width="1912" height="914" alt="image" src="https://github.com/user-attachments/assets/fa8307bb-2fe3-455f-8bed-54104d7d2c3c" />
+<img width="1912" height="914" alt="image" src="https://github.com/user-attachments/assets/d7c7f421-9e6f-45ed-84e5-c832ad85aa99" />
+
 ---
 
 **Made with ❤️ for privacy-conscious people**
