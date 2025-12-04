@@ -1,0 +1,27 @@
+<!-- SSH KEY -->
+<template x-if="formData.type === 'ssh_key'">
+    <div class="space-y-4">
+        <div class="grid grid-cols-2 gap-4">
+            <div><label class="block text-sm font-medium text-gray-300 mb-2">Username</label><input type="text"
+                    x-model="formData.username"
+                    class="input-dark w-full px-4 py-3 rounded-xl text-white placeholder-gray-500"
+                    :readonly="modalMode === 'view'"></div>
+            <div><label class="block text-sm font-medium text-gray-300 mb-2">Host</label><input type="text"
+                    x-model="formData.host"
+                    class="input-dark w-full px-4 py-3 rounded-xl text-white placeholder-gray-500"
+                    placeholder="github.com" :readonly="modalMode === 'view'"></div>
+        </div>
+        <div><label class="block text-sm font-medium text-gray-300 mb-2">Public Key</label><textarea
+                x-model="formData.public_key" rows="3"
+                class="input-dark w-full px-4 py-3 rounded-xl text-white placeholder-gray-500 font-mono text-xs resize-none"
+                placeholder="ssh-rsa AAAA..." :readonly="modalMode === 'view'"></textarea></div>
+        <div><label class="block text-sm font-medium text-gray-300 mb-2">Private
+                Key</label><textarea x-model="formData.private_key" rows="4"
+                class="input-dark w-full px-4 py-3 rounded-xl text-white placeholder-gray-500 font-mono text-xs resize-none"
+                placeholder="-----BEGIN OPENSSH PRIVATE KEY-----" :readonly="modalMode === 'view'"></textarea></div>
+        <div><label class="block text-sm font-medium text-gray-300 mb-2">Passphrase</label><input
+                :type="showPassword ? 'text' : 'password'" x-model="formData.passphrase"
+                class="input-dark w-full px-4 py-3 rounded-xl text-white placeholder-gray-500 font-mono"
+                :readonly="modalMode === 'view'"></div>
+    </div>
+</template>

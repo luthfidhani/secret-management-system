@@ -1,0 +1,148 @@
+<!-- IDENTITY -->
+<template x-if="formData.type === 'identity'">
+    <div class="space-y-4">
+        <h4 class="text-sm font-semibold text-vault-400 border-b border-vault-500/20 pb-2">Personal
+            Details</h4>
+        <div class="grid grid-cols-2 gap-4">
+            <div><label class="block text-sm font-medium text-gray-300 mb-2">Title</label><input type="text"
+                    x-model="formData.prefix_title"
+                    class="input-dark w-full px-4 py-3 rounded-xl text-white placeholder-gray-500"
+                    placeholder="Mr./Mrs./Ms." :readonly="modalMode === 'view'"></div>
+            <div><label class="block text-sm font-medium text-gray-300 mb-2">Gender</label><select
+                    x-model="formData.gender" class="input-dark w-full px-4 py-3 rounded-xl text-white"
+                    :disabled="modalMode === 'view'">
+                    <option value="">Select...</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="other">Other</option>
+                </select></div>
+        </div>
+        <div><label class="block text-sm font-medium text-gray-300 mb-2">Full Name</label><input type="text"
+                x-model="formData.full_name"
+                class="input-dark w-full px-4 py-3 rounded-xl text-white placeholder-gray-500" placeholder="John Doe"
+                :readonly="modalMode === 'view'"></div>
+        <div class="grid grid-cols-2 gap-4">
+            <div><label class="block text-sm font-medium text-gray-300 mb-2">Email</label><input type="email"
+                    x-model="formData.email"
+                    class="input-dark w-full px-4 py-3 rounded-xl text-white placeholder-gray-500"
+                    placeholder="john@example.com" :readonly="modalMode === 'view'"></div>
+            <div><label class="block text-sm font-medium text-gray-300 mb-2">Phone</label><input type="tel"
+                    x-model="formData.phone"
+                    class="input-dark w-full px-4 py-3 rounded-xl text-white placeholder-gray-500"
+                    placeholder="+62 812 3456 7890" :readonly="modalMode === 'view'"></div>
+        </div>
+        <div><label class="block text-sm font-medium text-gray-300 mb-2">Birth Date</label><input type="date"
+                x-model="formData.birth_date" class="input-dark w-full px-4 py-3 rounded-xl text-white"
+                :readonly="modalMode === 'view'"></div>
+
+        <h4 class="text-sm font-semibold text-vault-400 border-b border-vault-500/20 pb-2 pt-2">
+            Address Details</h4>
+        <div><label class="block text-sm font-medium text-gray-300 mb-2">Organization</label><input type="text"
+                x-model="formData.organization"
+                class="input-dark w-full px-4 py-3 rounded-xl text-white placeholder-gray-500"
+                placeholder="Company/Organization" :readonly="modalMode === 'view'"></div>
+        <div><label class="block text-sm font-medium text-gray-300 mb-2">Street
+                Address</label><input type="text" x-model="formData.address"
+                class="input-dark w-full px-4 py-3 rounded-xl text-white placeholder-gray-500"
+                placeholder="123 Main Street" :readonly="modalMode === 'view'"></div>
+        <div class="grid grid-cols-2 gap-4">
+            <div><label class="block text-sm font-medium text-gray-300 mb-2">City</label><input type="text"
+                    x-model="formData.city"
+                    class="input-dark w-full px-4 py-3 rounded-xl text-white placeholder-gray-500" placeholder="Jakarta"
+                    :readonly="modalMode === 'view'"></div>
+            <div><label class="block text-sm font-medium text-gray-300 mb-2">State/Province</label><input type="text"
+                    x-model="formData.state"
+                    class="input-dark w-full px-4 py-3 rounded-xl text-white placeholder-gray-500"
+                    placeholder="DKI Jakarta" :readonly="modalMode === 'view'"></div>
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+            <div><label class="block text-sm font-medium text-gray-300 mb-2">ZIP/Postal
+                    Code</label><input type="text" x-model="formData.postal_code"
+                    class="input-dark w-full px-4 py-3 rounded-xl text-white placeholder-gray-500" placeholder="12345"
+                    :readonly="modalMode === 'view'"></div>
+            <div><label class="block text-sm font-medium text-gray-300 mb-2">Country</label><input type="text"
+                    x-model="formData.country"
+                    class="input-dark w-full px-4 py-3 rounded-xl text-white placeholder-gray-500"
+                    placeholder="Indonesia" :readonly="modalMode === 'view'"></div>
+        </div>
+
+        <h4 class="text-sm font-semibold text-vault-400 border-b border-vault-500/20 pb-2 pt-2">
+            Contact/ID Details</h4>
+        <div class="grid grid-cols-2 gap-4">
+            <div><label class="block text-sm font-medium text-gray-300 mb-2">SSN</label><input type="password"
+                    x-model="formData.ssn"
+                    class="input-dark w-full px-4 py-3 rounded-xl text-white placeholder-gray-500 font-mono"
+                    placeholder="•••-••-••••" :readonly="modalMode === 'view'"></div>
+            <div><label class="block text-sm font-medium text-gray-300 mb-2">Passport
+                    No.</label><input type="text" x-model="formData.passport_number"
+                    class="input-dark w-full px-4 py-3 rounded-xl text-white placeholder-gray-500"
+                    :readonly="modalMode === 'view'"></div>
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+            <div><label class="block text-sm font-medium text-gray-300 mb-2">License
+                    No.</label><input type="text" x-model="formData.license_number"
+                    class="input-dark w-full px-4 py-3 rounded-xl text-white placeholder-gray-500"
+                    :readonly="modalMode === 'view'"></div>
+            <div><label class="block text-sm font-medium text-gray-300 mb-2">Website</label><input type="url"
+                    x-model="formData.website"
+                    class="input-dark w-full px-4 py-3 rounded-xl text-white placeholder-gray-500"
+                    placeholder="https://" :readonly="modalMode === 'view'"></div>
+        </div>
+
+        <h4 class="text-sm font-semibold text-vault-400 border-b border-vault-500/20 pb-2 pt-2">
+            Social Media</h4>
+        <div class="grid grid-cols-2 gap-4">
+            <div><label class="block text-sm font-medium text-gray-300 mb-2">X Handle</label><input type="text"
+                    x-model="formData.x_handle"
+                    class="input-dark w-full px-4 py-3 rounded-xl text-white placeholder-gray-500"
+                    placeholder="@username" :readonly="modalMode === 'view'"></div>
+            <div><label class="block text-sm font-medium text-gray-300 mb-2">LinkedIn</label><input type="text"
+                    x-model="formData.linkedin"
+                    class="input-dark w-full px-4 py-3 rounded-xl text-white placeholder-gray-500"
+                    :readonly="modalMode === 'view'"></div>
+            <div><label class="block text-sm font-medium text-gray-300 mb-2">Instagram</label><input type="text"
+                    x-model="formData.instagram"
+                    class="input-dark w-full px-4 py-3 rounded-xl text-white placeholder-gray-500"
+                    :readonly="modalMode === 'view'"></div>
+            <div><label class="block text-sm font-medium text-gray-300 mb-2">Facebook</label><input type="text"
+                    x-model="formData.facebook"
+                    class="input-dark w-full px-4 py-3 rounded-xl text-white placeholder-gray-500"
+                    :readonly="modalMode === 'view'"></div>
+            <div><label class="block text-sm font-medium text-gray-300 mb-2">Reddit</label><input type="text"
+                    x-model="formData.reddit"
+                    class="input-dark w-full px-4 py-3 rounded-xl text-white placeholder-gray-500"
+                    :readonly="modalMode === 'view'"></div>
+            <div><label class="block text-sm font-medium text-gray-300 mb-2">Yahoo</label><input type="text"
+                    x-model="formData.yahoo"
+                    class="input-dark w-full px-4 py-3 rounded-xl text-white placeholder-gray-500"
+                    :readonly="modalMode === 'view'"></div>
+        </div>
+
+        <h4 class="text-sm font-semibold text-vault-400 border-b border-vault-500/20 pb-2 pt-2">Work
+            Details</h4>
+        <div class="grid grid-cols-2 gap-4">
+            <div><label class="block text-sm font-medium text-gray-300 mb-2">Company</label><input type="text"
+                    x-model="formData.company"
+                    class="input-dark w-full px-4 py-3 rounded-xl text-white placeholder-gray-500"
+                    :readonly="modalMode === 'view'"></div>
+            <div><label class="block text-sm font-medium text-gray-300 mb-2">Job Title</label><input type="text"
+                    x-model="formData.job_title"
+                    class="input-dark w-full px-4 py-3 rounded-xl text-white placeholder-gray-500"
+                    :readonly="modalMode === 'view'"></div>
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+            <div><label class="block text-sm font-medium text-gray-300 mb-2">Work
+                    Phone</label><input type="tel" x-model="formData.work_phone"
+                    class="input-dark w-full px-4 py-3 rounded-xl text-white placeholder-gray-500"
+                    :readonly="modalMode === 'view'"></div>
+            <div><label class="block text-sm font-medium text-gray-300 mb-2">Work
+                    Email</label><input type="email" x-model="formData.work_email"
+                    class="input-dark w-full px-4 py-3 rounded-xl text-white placeholder-gray-500"
+                    :readonly="modalMode === 'view'"></div>
+        </div>
+        <div><label class="block text-sm font-medium text-gray-300 mb-2">Work Website</label><input type="url"
+                x-model="formData.work_website"
+                class="input-dark w-full px-4 py-3 rounded-xl text-white placeholder-gray-500"
+                :readonly="modalMode === 'view'"></div>
+    </div>
+</template>

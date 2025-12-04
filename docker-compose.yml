@@ -1,0 +1,11 @@
+# Docker-compose.yml version support, not internal version of this composition.
+services:
+  web:
+    container_name: secret-manager
+    build: .
+    env_file:
+      - .env
+    ports:
+      - "5000:5000"
+    volumes:
+      - .:/app # Copy the entire project directory into the container

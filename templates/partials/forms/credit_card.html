@@ -1,0 +1,48 @@
+<!-- CREDIT CARD -->
+<template x-if="formData.type === 'credit_card'">
+    <div class="space-y-4">
+        <div>
+            <label class="block text-sm font-medium text-gray-300 mb-2">Name on Card</label>
+            <input type="text" x-model="formData.cardholder_name"
+                class="input-dark w-full px-4 py-3 rounded-xl text-white placeholder-gray-500" placeholder="JOHN DOE"
+                :readonly="modalMode === 'view'">
+        </div>
+        <div>
+            <label class="block text-sm font-medium text-gray-300 mb-2">Card Number</label>
+            <div class="relative">
+                <input :type="showPassword ? 'text' : 'password'" x-model="formData.card_number"
+                    class="input-dark w-full px-4 py-3 pr-12 rounded-xl text-white placeholder-gray-500 font-mono"
+                    placeholder="4111 1111 1111 1111" :readonly="modalMode === 'view'">
+                <button type="button" @click="showPassword = !showPassword"
+                    class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-vault-400"><svg
+                        class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z">
+                        </path>
+                    </svg></button>
+            </div>
+        </div>
+        <div class="grid grid-cols-3 gap-4">
+            <div>
+                <label class="block text-sm font-medium text-gray-300 mb-2">Expiry</label>
+                <input type="text" x-model="formData.expiration_date"
+                    class="input-dark w-full px-4 py-3 rounded-xl text-white placeholder-gray-500" placeholder="MM/YY"
+                    :readonly="modalMode === 'view'">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-300 mb-2">CVV</label>
+                <input type="password" x-model="formData.security_code"
+                    class="input-dark w-full px-4 py-3 rounded-xl text-white placeholder-gray-500 font-mono"
+                    placeholder="•••" :readonly="modalMode === 'view'">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-300 mb-2">PIN</label>
+                <input type="password" x-model="formData.pin"
+                    class="input-dark w-full px-4 py-3 rounded-xl text-white placeholder-gray-500 font-mono"
+                    placeholder="••••" :readonly="modalMode === 'view'">
+            </div>
+        </div>
+    </div>
+</template>
