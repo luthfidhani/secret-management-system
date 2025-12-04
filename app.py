@@ -24,6 +24,7 @@ app.config.update(
     SESSION_COOKIE_HTTPONLY=True,
     SESSION_COOKIE_SAMESITE="Lax",
     PERMANENT_SESSION_LIFETIME=1800,  # 30 minutes
+    TEMPLATES_AUTO_RELOAD=True,  # Auto reload templates
 )
 
 VAULT_FILE = os.environ.get("VAULT_FILE_PATH", "./vault.enc")
@@ -432,4 +433,17 @@ def delete_entry(entry_id):
 
 
 if __name__ == "__main__":
-    app.run(debug=True, host="127.0.0.1", port=5000)
+    import glob
+
+    # Watch for changes in templates and static files
+    extra_files = []
+    extra_files.extend(glob.glob("templates/**/*.html", recursive=True))
+    extra_files.extend(glob.glob("static/**/*.css", recursive=True))
+    extra_files.extend(glob.glob("static/**/*.js", recursive=True))
+
+    app.run(
+        debug=True,
+        host="127.0.0.1",
+        port=5000,
+        extra_files=extra_files,  # Auto reload when these files change
+    )
