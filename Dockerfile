@@ -14,4 +14,4 @@ RUN uv sync --frozen --no-cache
 
 EXPOSE 5000
 
-CMD exec gunicorn --bind 0.0.0.0:$PORT --timeout 300 app:app
+CMD exec gunicorn --bind 0.0.0.0:$PORT --timeout 300 app.app:app

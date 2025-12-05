@@ -8,13 +8,13 @@ import secrets
 from functools import wraps
 from datetime import datetime
 from flask import Flask, render_template, request, jsonify, session, redirect, url_for
-from crypto_utils import (
+from app.crypto_utils import (
     encrypt_vault,
     decrypt_vault,
     create_empty_vault,
     generate_entry_id,
 )
-from drive_sync import (
+from app.drive_sync import (
     sync_on_startup,
     upload_vault_async,
     is_drive_sync_enabled,
