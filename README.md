@@ -118,6 +118,7 @@ Open `http://localhost:5000`
 secret-management-system/
 ├── app.py                          # Flask application (routes, API)
 ├── crypto_utils.py                 # Encryption/decryption utilities
+├── drive_sync.py                   # Google Drive sync module
 ├── requirements.txt                # Python dependencies
 ├── pyproject.toml                  # Project metadata
 ├── Dockerfile                      # Docker configuration
@@ -154,44 +155,178 @@ secret-management-system/
             └── bank_account.html   # Bank account form fields
 ```
 
-## 🔄 Syncing with Google Drive
+## 🔄 Auto-Sync with Google Drive
 
-You can sync your encrypted vault file to Google Drive for backup and multi-device access:
+Secret Management supports **automatic sync** to Google Drive. Perfect for ephemeral hosting (Render, Railway, Fly.io) where files are lost on restart.
 
-### Option 1: Google Drive Desktop App
+### How it works:
 
-1. Install [Google Drive for Desktop](https://www.google.com/drive/download/)
-2. Move or symlink your vault file to Google Drive folder:
-
-```bash
-# Move vault to Google Drive
-mv data/vault.enc ~/Google\ Drive/My\ Drive/secret-vault/
-
-# Create symlink (Linux/Mac)
-ln -s ~/Google\ Drive/My\ Drive/secret-vault/vault.enc ./data/vault.enc
-
-# Or set environment variable
-export VAULT_FILE_PATH=~/Google\ Drive/My\ Drive/secret-vault/vault.enc
+```
+┌─────────────────────────────────────────────────────────────────┐
+│  Server Startup                                                 │
+│  ─────────────────                                              │
+│  1. Check if vault.enc exists locally                           │
+│  2. If not → Download from Google Drive                         │
+│  3. If not in Drive → Fresh install (create new vault)          │
+├─────────────────────────────────────────────────────────────────┤
+│  On Save                                                        │
+│  ─────────────────                                              │
+│  1. Save vault.enc locally                                      │
+│  2. Upload to Google Drive (background, non-blocking)           │
+└─────────────────────────────────────────────────────────────────┘
 ```
 
-### Option 2: Using rclone
+### Setup Google Drive Sync (OAuth2)
 
-1. Install and configure [rclone](https://rclone.org/)
+> ⚠️ **Note**: As of April 2025, Google changed their policy. Service Accounts can no longer own Drive items. We use **OAuth2** instead, which works with personal Google accounts.
 
-```bash
-rclone config  # Setup Google Drive remote
+---
+
+#### Step 1: Create Google Cloud Project & Enable API
+
+1. Go to [Google Cloud Console](https://console.cloud.google.com/)
+2. Create a new project:
+   - Click dropdown at top → **"New Project"**
+   - Name: `secret-manager` (or any name)
+   - Click **"Create"**
+3. Enable **Google Drive API**:
+   - Go to **"APIs & Services"** → **"Library"**
+   - Search **"Google Drive API"**
+   - Click → **"Enable"**
+
+---
+
+#### Step 2: Configure OAuth Consent Screen
+
+1. Go to **"APIs & Services"** → **"OAuth consent screen"**
+2. Choose **"External"** → Click **"Create"**
+3. Fill in:
+   - **App name**: `secret-manager` (or any name)
+   - **User support email**: your email
+   - **Developer contact email**: your email
+4. Click **"Save and Continue"**
+5. **Scopes**: Skip, click **"Save and Continue"**
+6. **Test users**:
+   - Click **"+ ADD USERS"**
+   - Add your email (e.g., `yourname@gmail.com`)
+   - Click **"Save and Continue"**
+7. Click **"Back to Dashboard"**
+
+---
+
+#### Step 3: Create OAuth Credentials
+
+1. Go to **"APIs & Services"** → **"Credentials"**
+2. Click **"+ CREATE CREDENTIALS"** → **"OAuth client ID"**
+3. Application type: **Desktop app**
+4. Name: `secret-manager-sync`
+5. Click **"Create"**
+6. Click **"DOWNLOAD JSON"**
+7. Save file as `data/credentials.json` in project folder
+
+---
+
+#### Step 4: Create Google Drive Folder
+
+1. Open [Google Drive](https://drive.google.com/)
+2. Create new folder: `secret-vault`
+3. Open folder, copy **Folder ID** from URL:
+
+```
+https://drive.google.com/drive/folders/1ABCxyzDEF123456789
+                                        ^^^^^^^^^^^^^^^^^^^
+                                        THIS IS FOLDER ID
 ```
 
-2. Sync after changes:
+---
+
+#### Step 5: Generate OAuth Token (Run Locally)
 
 ```bash
+# Install dependencies (if not already)
+pip install google-auth-oauthlib google-api-python-client
+
+# Run auth script
+python drive_auth.py
+```
+
+The script will:
+
+1. Display a URL for login
+2. **Copy the URL** and open in browser (Chrome/Firefox/Edge)
+3. Login with Google account that was added as Test User
+4. Click **"Continue"** → **"Allow"**
+5. Browser redirects to localhost → Script receives token
+6. **Copy the `GOOGLE_OAUTH_TOKEN` output** for deployment
+
+Example output:
+
+```
+GOOGLE_OAUTH_TOKEN='{"token":"ya29.xxx","refresh_token":"1//xxx","client_id":"xxx.apps.googleusercontent.com",...}'
+```
+
+---
+
+#### Step 6: Deploy to Server/Hosting
+
+Set these **2 environment variables** on your hosting platform (Render/Railway/Fly.io):
+
+| Variable                 | Value                   | Example                                        |
+| ------------------------ | ----------------------- | ---------------------------------------------- |
+| `GOOGLE_OAUTH_TOKEN`     | Entire JSON from step 5 | `{"token":"ya29...","refresh_token":"1//..."}` |
+| `GOOGLE_DRIVE_FOLDER_ID` | Folder ID from step 4   | `1ABCxyzDEF123456789`                          |
+
+**⚠️ Important:**
+
+- `GOOGLE_OAUTH_TOKEN` must be in **1 line** (minified JSON)
+- No need to upload `credentials.json` to server
+- No need to upload `google_token.json` to server
+- Token will auto-refresh, no need to regenerate
+
+---
+
+### Environment Variables Summary
+
+| Variable                 | Required      | Description                                |
+| ------------------------ | ------------- | ------------------------------------------ |
+| `GOOGLE_OAUTH_TOKEN`     | ✅ For sync   | OAuth token JSON (from `drive_auth.py`)    |
+| `GOOGLE_DRIVE_FOLDER_ID` | ✅ For sync   | Google Drive folder ID                     |
+| `FLASK_SECRET_KEY`       | ⚠️ Production | Secret key for session                     |
+| `VAULT_FILE_PATH`        | ❌ Optional   | Custom vault path (default: `./vault.enc`) |
+
+---
+
+### Troubleshooting
+
+**Error: "Access blocked: app has not completed verification"**
+
+- Make sure your email is added as a **Test User** in OAuth consent screen
+
+**Error: "Address already in use"**
+
+- Port 8888 is in use, try: `AUTH_PORT=9999 python drive_auth.py`
+
+**Error: "invalid_grant" or "Token expired"**
+
+- Generate a new token by running `python drive_auth.py` again
+
+**Sync not working on server**
+
+- Make sure `GOOGLE_OAUTH_TOKEN` is copied completely (including `{}`)
+- Make sure `GOOGLE_DRIVE_FOLDER_ID` is correct (ID only, not full URL)
+
+---
+
+### Manual Sync (Alternative)
+
+If you prefer not to use auto-sync, you can use rclone:
+
+```bash
+# Install rclone and configure
+rclone config
+
+# Sync vault to Drive
 rclone copy data/vault.enc gdrive:secret-vault/
-```
-
-3. Or mount Google Drive:
-
-```bash
-rclone mount gdrive:secret-vault /mnt/vault --daemon
 ```
 
 ## ⚙️ Configuration

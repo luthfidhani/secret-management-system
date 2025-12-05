@@ -9,9 +9,15 @@ ENV/
 .venv
 vault.enc
 data/vault.enc
+data/google_token.json
 .env
 *.log
 .DS_Store
 instance/
 data/
+
+# OAuth credentials (NEVER commit these!)
+credentials.json
+client_secret*.json
+*_secret.json
 

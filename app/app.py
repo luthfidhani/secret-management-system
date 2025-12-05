@@ -14,6 +14,11 @@ from crypto_utils import (
     create_empty_vault,
     generate_entry_id,
 )
+from drive_sync import (
+    sync_on_startup,
+    upload_vault_async,
+    is_drive_sync_enabled,
+)
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("FLASK_SECRET_KEY", secrets.token_hex(32))
@@ -28,6 +33,14 @@ app.config.update(
 )
 
 VAULT_FILE = os.environ.get("VAULT_FILE_PATH", "./vault.enc")
+
+# Sync vault from Google Drive on startup (if configured)
+print("[Startup] Checking for vault sync...")
+sync_on_startup(VAULT_FILE)
+if is_drive_sync_enabled():
+    print("[Startup] Google Drive sync is ENABLED")
+else:
+    print("[Startup] Google Drive sync is DISABLED (no credentials configured)")
 
 # Valid entry types
 VALID_ENTRY_TYPES = [
@@ -145,11 +158,15 @@ def load_vault(master_password: str) -> dict | None:
 
 
 def save_vault(vault_data: dict, master_password: str):
-    """Encrypt and save vault to file."""
+    """Encrypt and save vault to file, then sync to Google Drive."""
     encrypted_data = encrypt_vault(vault_data, master_password)
 
-    with open(get_vault_path(), "wb") as f:
+    vault_path = get_vault_path()
+    with open(vault_path, "wb") as f:
         f.write(encrypted_data)
+
+    # Sync to Google Drive in background
+    upload_vault_async(vault_path)
 
 
 def login_required(f):
