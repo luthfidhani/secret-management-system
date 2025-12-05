@@ -162,6 +162,10 @@ def save_vault(vault_data: dict, master_password: str):
     encrypted_data = encrypt_vault(vault_data, master_password)
 
     vault_path = get_vault_path()
+
+    # Ensure directory exists
+    os.makedirs(os.path.dirname(vault_path), exist_ok=True)
+
     with open(vault_path, "wb") as f:
         f.write(encrypted_data)
 
