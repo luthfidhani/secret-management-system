@@ -272,6 +272,17 @@ def update_entry_from_data(entry: dict, data: dict) -> dict:
 # ============== ROUTES ==============
 
 
+@app.route("/health")
+def health_check():
+    """Health check endpoint for monitoring and load balancers."""
+    return jsonify(
+        {
+            "status": "healthy",
+            "service": "secret-management-system",
+        }
+    ), 200
+
+
 @app.route("/")
 def index():
     """Main page - shows setup or login based on vault existence."""
